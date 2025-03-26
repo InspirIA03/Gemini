@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request
 from google import genai
 from google.genai import types
 from PIL import Image
 from io import BytesIO
-import base64
 import os
 
 app = Flask(__name__)
@@ -23,17 +22,22 @@ def index():
     result_image = None
     if request.method == 'POST':
         prompt = request.form['prompt']
-        image_file = request.files['image']
+        image_file1 = request.files['image1']
+        image_file2 = request.files['image2']
         
-        if image_file and prompt:
-            img_path = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
-            image_file.save(img_path)
+        if image_file1 and image_file2 and prompt:
+            path1 = os.path.join(app.config['UPLOAD_FOLDER'], image_file1.filename)
+            path2 = os.path.join(app.config['UPLOAD_FOLDER'], image_file2.filename)
 
-            image = Image.open(img_path)
+            image_file1.save(path1)
+            image_file2.save(path2)
+
+            image1 = Image.open(path1)
+            image2 = Image.open(path2)
 
             response = client.models.generate_content(
                 model='gemini-2.0-flash-exp-image-generation',
-                contents=[prompt, image],
+                contents=[prompt, image1, image2],
                 config=types.GenerateContentConfig(response_modalities=['Text', 'Image'])
             )
 
