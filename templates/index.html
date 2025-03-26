@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador con Gemini</title>
+</head>
+<body>
+    <h2>Transformar imagen con Gemini</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Sube una imagen:</label><br>
+        <input type="file" name="image" accept="image/*" required><br><br>
+
+        <label>Escribe tu prompt:</label><br>
+        <textarea name="prompt" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">Generar</button>
+    </form>
+
+    {% if result_image %}
+        <h3>Imagen generada:</h3>
+        <img src="{{ result_image }}" alt="Imagen generada" width="400">
+    {% endif %}
+</body>
+</html>
